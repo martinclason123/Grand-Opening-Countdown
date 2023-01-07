@@ -1,0 +1,225 @@
+{{ 'flip.min.js' | asset_url | script_tag }}
+{{ "flip.min.css" | asset_url | stylesheet_tag }}
+
+
+<section class="mc__countdown">
+  <div class="mc__countdown--inner">
+    <h2>Opening in:</h2>
+    
+    <div class="tick"
+        data-did-init="handleTickInit">
+   
+       <div data-repeat="true"
+            data-layout="horizontal center fit"
+            data-transform="preset(d, h, m, s) -> delay">
+   
+           <div class="tick-group">
+   
+               <div data-key="value"
+                    data-repeat="true"
+                    data-transform="pad(00) -> split -> delay">
+   
+                   <span data-view="flip"></span>
+   
+               </div>
+   
+               <span data-key="label"
+                     data-view="text"
+                     class="tick-label"></span>
+   
+           </div>
+   
+       </div>
+   
+   </div>
+   
+   <script>
+       function handleTickInit(tick) {
+   
+           // Uncomment to set labels to different language ( in this case Dutch )
+           /*
+           var locale = {
+               YEAR_PLURAL: 'Jaren',
+               YEAR_SINGULAR: 'Jaar',
+               MONTH_PLURAL: 'Maanden',
+               MONTH_SINGULAR: 'Maand',
+               WEEK_PLURAL: 'Weken',
+               WEEK_SINGULAR: 'Week',
+               DAY_PLURAL: 'Dagen',
+               DAY_SINGULAR: 'Dag',
+               HOUR_PLURAL: 'Uren',
+               HOUR_SINGULAR: 'Uur',
+               MINUTE_PLURAL: 'Minuten',
+               MINUTE_SINGULAR: 'Minuut',
+               SECOND_PLURAL: 'Seconden',
+               SECOND_SINGULAR: 'Seconde',
+               MILLISECOND_PLURAL: 'Milliseconden',
+               MILLISECOND_SINGULAR: 'Milliseconde'
+           };
+   
+           for (var key in locale) {
+               if (!locale.hasOwnProperty(key)) { continue; }
+               tick.setConstant(key, locale[key]);
+           }
+           */
+           {% capture countdown %}{{ section.settings.start_year }}-{{ section.settings.start_month }}-{{ section.settings.start_day }}{% endcapture %}
+           
+           var year = `{{ section.settings.start_year }}`;
+           var month = `{{ section.settings.start_month }}`;
+           var day = `{{ section.settings.start_day }}`;
+
+           if (month.length < 2){
+            month = `0${month}`; 
+           }
+           if (month.length < 2){
+            day = `0${day}`; 
+           }
+
+           var nextYear = (new Date()).getFullYear() + 1;
+           var openingDate = `${year}-${month}-${day}`;
+           console.log(openingDate);
+           Tick.count.down(openingDate).onupdate = function(value) {
+               tick.value = value;
+           };
+   
+       }
+   </script>
+    
+  </div>
+  </div>
+</section>
+{{ 'flip.min.js' | asset_url | script_tag }}
+
+<style>
+
+.tick {
+    padding-bottom: 1em;
+    font-size:1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.tick-label {
+    font-size:.375em;
+    text-align:center;
+    color: #ffffff;
+}
+
+.tick-group {
+    margin:0 .25em;
+    text-align:center;
+}
+
+.mc__countdown {
+  width: 100%;
+  background: #161f4e;
+  font-size: .521vw;
+}
+.mc__countdown .container {
+  display: flex;
+  justify-content: center;
+}
+.mc__countdown h2 {
+  color: #ffffff;
+  font-size: 3em;
+  text-align:center;
+  padding: 1em;
+}
+
+@media(max-width:640px){
+  .mc__countdown {
+  font-size: 1.563vw;
+  }
+  .tick {
+    width: 80%;
+  }
+  .banner__content { 
+  position: absolute !important;
+    top: 13%;
+  }
+  .countDown__interval_basic_cont_description {
+    font-size: 2.2vw;
+  }
+  .countDown__digit_cont {
+  font-size: 6.521vw;
+  }
+}
+
+@media(min-width:641px){
+  .mc__countdown {
+  font-size: .521vw;
+  }
+  .countDown__digit_cont {
+  font-size: 4.521vw;
+  }
+  .countDown__interval_basic_cont_description {
+    font-size: 1.2vw;
+  }
+}
+
+
+
+</style>
+
+{% schema %}
+
+{
+    "name" : "Countdown",
+    "settings" : [
+       {
+  "type": "range",
+  "id": "start_year",
+  "label": "Year",
+    "min": 2023,
+    "max": 2025,
+    "step": 1,
+  "default": 2023
+},
+{
+  "type": "range",
+  "id": "start_month",
+  "label": "Month",
+    "min": 1,
+    "max": 12,
+    "step": 1,
+  "default": 11
+},
+{
+  "type": "range",
+  "id": "start_day",
+  "label": "Day",
+    "min": 1,
+    "max": 31,
+    "step": 1,
+  "default": 27
+},
+{
+  "type": "range",
+  "id": "start_hours",
+  "label": "Hours",
+    "min": 0,
+    "max": 23,
+    "step": 1,
+  "default": 16
+},
+{
+  "type": "range",
+  "id": "start_minute",
+  "label": "Minute",
+    "min": 0,
+    "max": 60,
+    "step": 1,
+  "default": 0
+}
+    ]
+    
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+
+{% endjavascript %}
